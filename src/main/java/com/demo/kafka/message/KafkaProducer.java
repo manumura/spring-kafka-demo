@@ -17,7 +17,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 @RequiredArgsConstructor
 public class KafkaProducer {
 
-    private final KafkaTemplate<Long, Customer> kafkaTemplate;
+    private final KafkaTemplate<String, Customer> kafkaTemplate;
 
     public void sendMessage(Long key, Customer payload) {
         log.info("Sending message with key {} and payload {}", key, payload);
@@ -25,12 +25,12 @@ public class KafkaProducer {
         Message<Customer> message = MessageBuilder
                 .withPayload(payload)
                 .setHeader(KafkaHeaders.TOPIC, Constants.TOPIC)
-                .setHeader(KafkaHeaders.MESSAGE_KEY, key.toString())
+                .setHeader(KafkaHeaders.MESSAGE_KEY, String.valueOf(key))
                 .build();
 
-        // TODO test batch processing
-//        for (int i = 0; i < 10; i++) {
-            ListenableFuture<SendResult<Long, Customer>> result = kafkaTemplate.send(message);
+        // Test batch processing
+        for (int i = 0; i < 10; i++) {
+            ListenableFuture<SendResult<String, Customer>> result = kafkaTemplate.send(message);
             result.addCallback(
                     r -> {
                         assert r != null;
@@ -38,6 +38,6 @@ public class KafkaProducer {
                     },
                     ex ->log.info("Unable to send message=[{}] due to : {}", message, ex.getMessage())
             );
-//        }
+        }
     }
 }
