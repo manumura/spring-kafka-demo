@@ -1,4 +1,4 @@
-# Demo Spring Boot gRPC Client
+# Demo Spring Boot Kafka
 
 ## Building Docker Image
 
