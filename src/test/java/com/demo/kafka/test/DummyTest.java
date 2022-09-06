@@ -20,7 +20,21 @@ public class DummyTest {
 
         int[] nums = new int[]{1,2,3,4};
         int[] p = productExceptSelf(nums);
-        System.out.println(Arrays.toString(p));
+//        System.out.println(Arrays.toString(p));
+
+        System.out.println(multiply(4, 5));
+    }
+
+    public static int multiply(int n, int m) {
+        int res = 0;
+        int b = m;
+
+        while (b > 0) {
+            res += n;
+            b--;
+        }
+
+        return res;
     }
 
     public static int[] productExceptSelf(int[] nums) {
