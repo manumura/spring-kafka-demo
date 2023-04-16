@@ -1,7 +1,65 @@
+server:
+    port: 8080
+
 spring:
+    application:
+        name: spring-kafka-demo
+    config:
+        import: file:.env[.properties]
+    security:
+      user:
+        name: ${SPRING_SECURITY_USER}
+        password: ${SPRING_SECURITY_PASSWORD}
     kafka:
         bootstrap-servers: localhost:9092
         listener:
             ack-mode: RECORD
             pollTimeout: 3000
             authExceptionRetryInterval: 5000
+    mail:
+        host: smtp.sendgrid.net
+        port: 465
+        username: ${SMTP_USER}
+        password: ${SMTP_PASSWORD}
+        properties:
+            mail:
+                transport:
+                    protocol: smtp
+                smtp:
+                    ssl:
+                        enable: ${SMTP_SECURE}
+    boot:
+        admin:
+            client:
+                enabled: true
+                url: http://localhost:8093
+                auto-registration: true
+                username: ${SBA_USER}
+                password: ${SBA_PASSWORD}
+                instance:
+                    metadata:
+                        user.name: ${spring.security.user.name}
+                        user.password: ${spring.security.user.password}
+management:
+    endpoints:
+        web:
+            exposure:
+                include: "*"
+    info:
+        env:
+            enabled: true
+        git:
+            enabled: true
+            mode: simple
+        java:
+            enabled: true
+    endpoint:
+        health:
+            show-details: always
+
+logging:
+    level:
+        de:
+            codecentric:
+                boot:
+                    admin: DEBUG

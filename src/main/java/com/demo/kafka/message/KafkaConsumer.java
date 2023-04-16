@@ -21,10 +21,10 @@ public class KafkaConsumer {
 //        log.info("Headers: {}", headers);
 //    }
 
-    // Test batch consume
+    // Test batch consume props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 3);
     @KafkaListener(topics = Constants.TOPIC, groupId = Constants.GROUP_ID)
     public void onMessage(@Payload List<Customer> customers,
-                          @Header(KafkaHeaders.RECEIVED_PARTITION_ID) List<Integer> partitions,
+                          @Header(KafkaHeaders.RECEIVED_PARTITION) List<Integer> partitions,
                           @Header(KafkaHeaders.OFFSET) List<Long> offsets) {
         log.info("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         log.info("Starting the process to receive batch messages");
