@@ -32,10 +32,8 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots clean package -DskipTests
 
-      - name: Build Docker Image
-        run: |
-          docker build -t ghcr.io/manumura/spring-kafka-demo:latest .
-
-      - name: Push Image to GHCR
-        run: |
-          docker push ghcr.io/manumura/spring-kafka-demo:latest
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: manumura/spring-kafka-demo:latest
