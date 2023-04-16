@@ -29,8 +29,10 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, Constants.GROUP_ID);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"latest");
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        // Avoid poison pill issues
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
+        // Consume messages by batch
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 3);
         return props;
     }
