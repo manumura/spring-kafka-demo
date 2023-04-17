@@ -37,4 +37,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: manumura/spring-kafka-demo:latest
+          tags: ghcr.io/manumura/spring-kafka-demo:latest
+      - name: Image digest
+        run: echo ${{ steps.build.outputs.digest }}
