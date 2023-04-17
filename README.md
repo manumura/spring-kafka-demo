@@ -10,6 +10,8 @@ Run spring-boot build image plugin
 
 `docker run -p 8080:8080 -d --name spring-kafka-demo --env-file .env manumura/spring-kafka-demo`
 
+`docker run -p 8080:8080 -d --name spring-kafka-demo --env-file .env ghcr.io/manumura/spring-kafka-demo:master`
+
 ## Run Kafdrop
 
 `cd docker`

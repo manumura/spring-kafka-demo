@@ -1,4 +1,4 @@
-name: Push Image to GHCR
+name: Push Image to Container Registry
 
 on:
   push:
