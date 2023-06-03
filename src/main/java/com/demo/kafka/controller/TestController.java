@@ -24,7 +24,7 @@ public class TestController {
     @PostMapping(value = "/api/message/send") // APPLICATION_NDJSON_VALUE
     public ResponseEntity<Void> sendMessage(@Valid @RequestBody Customer customer) throws ExecutionException, InterruptedException {
         log.info("Sending message to Kafka: {}", customer);
-        kafkaProducer.sendMessage(customer.getId(), customer);
+        kafkaProducer.sendMessage(customer.id(), customer);
         return ResponseEntity.ok().build();
     }
 

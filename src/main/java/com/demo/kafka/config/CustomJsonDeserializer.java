@@ -20,10 +20,10 @@ public class CustomJsonDeserializer extends JsonDeserializer<String> {
         log.info("JSON string value: {}", value);
         if (StringUtils.isEmpty(value)) {
             return value;
-        } else {
-            String escapedValue = Jsoup.clean(value, Safelist.basic());
-            log.info("JSON string value escaped: {}", escapedValue);
-            return escapedValue;
         }
+
+        String escapedValue = Jsoup.clean(value, Safelist.basic());
+        log.info("JSON string value escaped: {}", escapedValue);
+        return escapedValue;
     }
 }
