@@ -31,7 +31,7 @@ spring:
   boot:
     admin:
       client:
-        enabled: true
+        enabled: false
         url: http://localhost:8093
         auto-registration: true
         username: ${SBA_USER}
