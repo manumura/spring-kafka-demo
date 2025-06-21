@@ -10,10 +10,8 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.concurrent.ListenableFuture;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @Component
@@ -22,10 +20,14 @@ public class KafkaProducer {
 
     private final KafkaTemplate<String, Customer> kafkaTemplate;
 
-    public void sendMessage(Long key, Customer payload) throws InterruptedException, ExecutionException {
+    public void sendMessage(Long key, Customer payload) {
         log.info("Sending message with key {} and payload {}", key, payload);
 
-        Message<Customer> message = MessageBuilder.withPayload(payload).setHeader(KafkaHeaders.TOPIC, Constants.TOPIC).setHeader(KafkaHeaders.KEY, String.valueOf(key)).build();
+        Message<Customer> message = MessageBuilder
+                .withPayload(payload)
+                .setHeader(KafkaHeaders.TOPIC, Constants.TOPIC)
+                .setHeader(KafkaHeaders.KEY, String.valueOf(key))
+                .build();
 
         // Test batch processing
         for (int i = 0; i < 10; i++) {

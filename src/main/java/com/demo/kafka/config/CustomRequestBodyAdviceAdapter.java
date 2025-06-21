@@ -2,6 +2,7 @@ package com.demo.kafka.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.MethodParameter;
@@ -26,21 +27,20 @@ public class CustomRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<?
-            extends HttpMessageConverter<?>> converterType) throws IOException {
+    public @NotNull HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, @NotNull MethodParameter parameter, @NotNull Type targetType, @NotNull Class<? extends HttpMessageConverter<?>> converterType) throws IOException {
         String body = IOUtils.toString(inputMessage.getBody(), UTF_8);
         log.info("beforeBodyRead - Data from Body: {}", body);
 //        String escapedBody = Jsoup.clean(body, Safelist.basic()).replace("\"","\\\"");
 //        log.info("Escaped Data from Body: {}", escapedBody);
 
-        HttpInputMessage myMessage = new HttpInputMessage(){
+        HttpInputMessage myMessage = new HttpInputMessage() {
             @Override
-            public InputStream getBody() {
+            public @NotNull InputStream getBody() {
                 return new ByteArrayInputStream(body.getBytes());
             }
 
             @Override
-            public HttpHeaders getHeaders() {
+            public @NotNull HttpHeaders getHeaders() {
                 return inputMessage.getHeaders();
             }
         };
@@ -50,13 +50,13 @@ public class CustomRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter {
 
     @Nullable
     @Override
-    public Object handleEmptyBody(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public Object handleEmptyBody(Object body, @NotNull HttpInputMessage inputMessage, @NotNull MethodParameter parameter, @NotNull Type targetType, @NotNull Class<? extends HttpMessageConverter<?>> converterType) {
         log.info("Data from Body is empty");
         return super.handleEmptyBody(body, inputMessage, parameter, targetType, converterType);
     }
 
     @Override
-    public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public @NotNull Object afterBodyRead(@NotNull Object body, @NotNull HttpInputMessage inputMessage, @NotNull MethodParameter parameter, Type targetType, @NotNull Class<? extends HttpMessageConverter<?>> converterType) {
         log.info("afterBodyRead - Type: {}", targetType.getTypeName());
 
         try {
@@ -70,7 +70,7 @@ public class CustomRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter {
     }
 
     @Override
-    public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public boolean supports(@NotNull MethodParameter methodParameter, @NotNull Type targetType, @NotNull Class<? extends HttpMessageConverter<?>> converterType) {
         return true;
     }
 }
