@@ -1,15 +1,13 @@
-FROM eclipse-temurin:17 as builder
-WORKDIR /app
+FROM amazoncorretto:21-alpine AS builder
+WORKDIR /builder
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar
-RUN java -Djarmode=layertools -jar application.jar extract
+RUN java -Djarmode=tools -jar application.jar extract --layers --destination extracted
 
-FROM eclipse-temurin:17
-RUN useradd spring
-USER spring
-WORKDIR /app
-COPY --from=builder app/dependencies/ ./
-COPY --from=builder app/spring-boot-loader/ ./
-COPY --from=builder app/snapshot-dependencies/ ./
-COPY --from=builder app/application/ ./
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "org.springframework.boot.loader.JarLauncher"]
+FROM amazoncorretto:21-alpine
+WORKDIR /application
+COPY --from=builder /builder/extracted/dependencies/ ./
+COPY --from=builder /builder/extracted/spring-boot-loader/ ./
+COPY --from=builder /builder/extracted/snapshot-dependencies/ ./
+COPY --from=builder /builder/extracted/application/ ./
+ENTRYPOINT ["java", "-jar", "application.jar"]
